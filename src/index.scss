@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600');
+@import './Variables.scss';
+
+html {
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $background;
+  color: $white;
+  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+}
+

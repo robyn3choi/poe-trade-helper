@@ -1,0 +1,82 @@
+@import './../Variables.scss';
+
+.cards-table {
+    background-color: #282828;
+    width: 80%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-top:60px;
+}
+
+// sorted line
+.ReactTable .rt-thead .rt-th.-sort-desc, .ReactTable .rt-thead .rt-td.-sort-desc {
+    box-shadow: inset 0 -3px 0 0 $white;
+}
+
+// stripes on every 2nd row
+.ReactTable.-striped .rt-tr.-odd {
+    background: rgba(0,0,0,0.1);
+}
+
+// lines between table headings
+.ReactTable .rt-thead .rt-th, .ReactTable .rt-thead .rt-td {
+    border-right: 1px solid $background;
+    border-right: none;
+}
+
+// row hover highlight
+.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+// header groups
+.ReactTable .rt-thead.-headerGroups {
+    // background: none;
+    // border-bottom: none;
+}
+
+// header groups top row headings
+.rt-thead.-headerGroups > .rt-tr > .rt-th{
+    //background: rgb(49, 49, 49);
+}
+
+// table heading
+.ReactTable .rt-thead .rt-th {
+    height: 48px;
+    padding: 0 7px;
+    line-height: 48px;
+    font-weight: 400;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(53, 53, 53);
+}
+
+//table data
+.ReactTable .rt-td {
+    padding: 0 7px;
+    height: 48px;
+    line-height: 48px;
+}
+
+.cards-table-cell_price {
+    text-align: left;
+}
+
+.cards-table__currency-icon {
+    width: 30px;
+    vertical-align: middle;
+}
+
+.cards-table__price {
+    text-align: center;
+}
+
+.cards-table__margin {
+    text-align: right;
+}
+
