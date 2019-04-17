@@ -9,83 +9,29 @@ class CardsTable extends React.Component {
   state = {items: []};
 
   componentDidMount() {
-    axios.get('http://localhost:3000/table')
+    axios.get('https://api.pathoftrade.com/table')
       .then(res => this.formatItems(res.data))
       .catch(err => console.log(err));
   }
 
   formatItems = items => {
     for (let item of items) {
+      if (!item) break; //TODO: remove
       for (let [key, val] of Object.entries(item)) {
-        if (key.includes('ex') || key === 'margin') {
-          val = val.toFixed(2);
+        if (key.includes('Ex') || key === 'margin') {
+          item[key] = val.toFixed(2);
           if (key === 'margin') {
-            val += '%';
+            item[key] += '%';
           }
+        }
+        else if (key.includes('Ch')) {
+          item[key] = val.toFixed(0);
         }
       }
     }
-    this.setState({items});
+    var filtered = items.filter((item, index, arr) => item.id >= 0); //TODO: remove
+    this.setState({items: filtered});
   } 
-
-  // const items = [
-  //   {
-  //     name: 'Mirror of Kalandra',
-  //     card: 'House Of Mirrors',
-  //     stack: 9,
-  //     cardPriceCh: 1165,
-  //     cardPriceEx: 9,
-  //     stackPriceCh: 10485,
-  //     stackPriceEx: 87,
-  //     itemPriceCh: 11600,
-  //     itemPriceEx: 96,
-  //     profitCh: 1115,
-  //     profitEx: 9,
-  //     margin: "9.61%"
-  //   },
-  //   {
-  //     name: 'Mirror of Kalandra',
-  //     card: 'House Of Mirrors',
-  //     stack: 9,
-  //     cardPriceCh: 1165,
-  //     cardPriceEx: 9,
-  //     stackPriceCh: 10485,
-  //     stackPriceEx: 87,
-  //     itemPriceCh: 11600,
-  //     itemPriceEx: 96,
-  //     profitCh: 1115,
-  //     profitEx: 9,
-  //     margin: "9.61%"
-  //   },
-  //   {
-  //     name: 'Mirror of Kalandra',
-  //     card: 'House Of Mirrors',
-  //     stack: 9,
-  //     cardPriceCh: 1165,
-  //     cardPriceEx: 9,
-  //     stackPriceCh: 10485,
-  //     stackPriceEx: 87,
-  //     itemPriceCh: 11600,
-  //     itemPriceEx: 96,
-  //     profitCh: 1115,
-  //     profitEx: 9,
-  //     margin: "9.61%"
-  //   },
-  //   {
-  //     name: 'Mirror of Kalandra',
-  //     card: 'House Of Mirrors',
-  //     stack: 9,
-  //     cardPriceCh: 1165,
-  //     cardPriceEx: 9,
-  //     stackPriceCh: 10485,
-  //     stackPriceEx: 87,
-  //     itemPriceCh: 11600,
-  //     itemPriceEx: 96,
-  //     profitCh: 1115,
-  //     profitEx: 9,
-  //     margin: "9.61%"
-  //   }
-  // ];
 
   render() {
     const chaosImage = <img className='cards-table__currency-icon' src={process.env.PUBLIC_URL + 'images/chaos.png'} alt='chaos' />;
