@@ -4,7 +4,7 @@
     //background-color: #282828;
     width: 80%;
     min-width: 1070px;
-    max-width: 1250px;
+    max-width: 1300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,15 +12,16 @@
     margin-top:60px;
     border: none;
     font-weight: 300;
+    font-size: 0.95rem;
 }
 
 // sorted line
 .ReactTable .rt-thead .rt-th.-sort-desc, .ReactTable .rt-thead .rt-td.-sort-desc {
-    box-shadow: inset 0 -3px 0 0 $white;
+    box-shadow: inset 0 -3px 0 0 $white !important;
 }
 
 .ReactTable .rt-thead .rt-th.-sort-asc, .ReactTable .rt-thead .rt-td.-sort-asc {
-    box-shadow: inset 0 3px 0 0 $white;
+    box-shadow: inset 0 3px 0 0 $white !important;
 }
 
 // stripes on every 2nd row
@@ -47,7 +48,7 @@
 
 .ReactTable .rt-thead.-header {
     box-shadow: none;
-    background: rgba(255,255,255,0.05);
+    background: #303030;
 }
 
 // header groups top row headings
@@ -61,7 +62,8 @@
     padding: 0 7px;
     line-height: 48px;
     font-weight: 400;
-    font-size: 1.1rem;
+    font-size: 1.18rem;
+    font-weight: 400;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,14 +71,24 @@
 }
 
 //table data
-.ReactTable .rt-td {
+.ReactTable .rt-tbody .rt-td {
     padding: 0 7px;
     height: 48px;
     line-height: 48px;
+    border: none;
 }
 
 .ReactTable .rt-tbody .rt-tr-group {
-    border-bottom: 1px solid rgb(68, 68, 68);
+    border: none;
+}
+
+// row hover highlight
+.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.cards-table__card-heading {
+    //text-align: left;
 }
 
 .cards-table-cell_price {
@@ -89,53 +101,88 @@
 }
 
 .cards-table__stack {
+    //padding-left: 18px !important;
     text-align: center;
+    //font-style: italic;
+    font-weight: 400;
+    font-size: 1.1em;
+    //color: rgb(158, 158, 158);
+}
+
+.cards-table__price_stack {
+    //font-style: italic;
+    //color: rgb(158, 158, 158);
+}
+
+.cards-table__item {
+    text-align: left;
+    padding-left: 18px !important;
 }
 
 .cards-table__price {
-    text-align: center;
+    //text-align: left;
+    //padding: 0 !important;
 }
 
 .cards-table__price_ch {
-    margin-left: 10px;
+    //margin-left: 14px;
+    text-align: center;
 }
 
-.cards-table__price_ex {
-    margin-right: 10px;
+.ReactTable .rt-tbody .rt-td.cards-table__price_ex,
+.ReactTable .rt-tbody .rt-td .cards-table__price_ex {
+    //margin-right: 14px;
+    text-align: center;
+    //border-right: 1px solid rgba(255,255,255,0.05);
+    border-right: 1px solid rgb(53, 53, 53);
 }
+
+
 
 .cards-table__ch-column {
-    margin-left: 10px;
+   // margin-left: 14px;
 }
 
 .cards-table__ex-column {
-    margin-right: 10px;
+ //  margin-right: 14px;
 }
 
-// .cards-table__margin {
-//     text-align: right;
-// }
+.cards-table__margin {
+    text-align: right;
+}
 
 // .ReactTable .rt-thead .rt-th.cards-table__margin-heading {
 //     padding-left: 0;
 // }
 
+.cards-table__num_negative {
+    color: #ec3737;
+}
+
+.cards-table__num_positive {
+    color: #5dde5d;
+}
 
 .cards-table__search-btn {
-    vertical-align: middle;
-    margin-bottom: 4px;
+    margin-top: 7px;
     background: transparent;
     border: solid 1px grey;
-    cursor: pointer;
+    padding: 6px;
+    display: block;
+    height: 34px;
+    width: 34px;
+    position: relative;
 
     img {
         height:28px;
         width: 22px;
-        padding-top:15%;
+        position: absolute;
+        top: 2px;
+        //padding-bottom: 10px;
     }
 }
 
 .cards-table__search-btn:hover {
-    background-color: rgb(85, 85, 85);
+    background-color: #303030;
 }
 
