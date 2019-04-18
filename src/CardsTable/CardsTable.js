@@ -9,8 +9,8 @@ class CardsTable extends React.Component {
   state = { items: [] };
 
   componentDidMount() {
-    //axios.get('https://api.pathoftrade.com/table')
-    axios.get('http://localhost:5000/table')
+    axios.get('https://api.pathoftrade.com/table')
+    //axios.get('http://localhost:5000/table')
       .then(res => this.formatItems(res.data.tableEntries, res.data.exaltedPrice))
       .catch(err => console.log(err));
   }
