@@ -17,8 +17,6 @@ class CardsTable extends React.Component {
 
   formatItems = (items, exaltedPrice) => {
     for (let item of items) {
-      if (!item) continue; //TODO: remove
-
       for (let [key, val] of Object.entries(item)) {
         if (key.includes('Ch')) {
           item[key] = +val.toFixed(0);
@@ -30,10 +28,9 @@ class CardsTable extends React.Component {
       item.stackPriceEx = +(item.cardPriceEx * item.stack).toFixed(2);
       item.profitCh = item.itemPriceCh - item.stackPriceCh;
       item.profitEx = +(item.itemPriceEx - item.stackPriceEx).toFixed(2);
-      item.margin = (item.profitCh / item.itemPriceCh * 100).toFixed(2) + "%";
+      item.margin = +(item.profitCh / item.itemPriceCh * 100).toFixed(2);
     }
-    var filtered = items.filter((item, index, arr) => item.itemId >= 0); //TODO: remove
-    this.setState({ items: filtered });
+    this.setState({ items });
   }
 
   buildSearchCell = (cardName) => {
@@ -61,15 +58,13 @@ class CardsTable extends React.Component {
 
   buildMarginCell = (margin) => {
     let className = 'cards-table__num_neutral';
-    const marginNum = Number(margin.substring(0, margin.length - 1));
-
-    if (marginNum > 0) {
+    if (margin > 0) {
       className = 'cards-table__num_positive';
     }
-    else if (marginNum < 0) {
+    else if (margin < 0) {
       className = 'cards-table__num_negative';
     }
-    return <div className={`cards-table__price cards-table__margin ${className}`}>{margin}</div>;
+    return <div className={`cards-table__price cards-table__margin ${className}`}>{margin + '%'}</div>;
   }
 
   render() {
@@ -80,7 +75,8 @@ class CardsTable extends React.Component {
         Header: 'Card',
         accessor: 'card',
         minWidth: 170,
-        headerClassName: 'cards-table__card-heading'
+        headerClassName: 'cards-table__card-heading',
+        className: 'cards-table__card'
       },
       {
         Header: 'Card Price',
@@ -88,14 +84,14 @@ class CardsTable extends React.Component {
           {
             Header: props => chaosImage,
             accessor: 'cardPriceCh',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ch-column',
             className: 'cards-table__price cards-table__price_ch'
           },
           {
             Header: props => exaltedImage,
             accessor: 'cardPriceEx',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ex-column',
             className: 'cards-table__price cards-table__price_ex'
           },
@@ -113,14 +109,14 @@ class CardsTable extends React.Component {
           {
             Header: props => chaosImage,
             accessor: 'stackPriceCh',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ch-column',
             className: 'cards-table__price cards-table__price_ch cards-table__price_stack'
           },
           {
             Header: props => exaltedImage,
             accessor: 'stackPriceEx',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ex-column',
             className: 'cards-table__price cards-table__price_ex cards-table__price_stack'
           },
@@ -138,14 +134,14 @@ class CardsTable extends React.Component {
           {
             Header: props => chaosImage,
             accessor: 'itemPriceCh',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ch-column',
             className: 'cards-table__price cards-table__price_ch'
           },
           {
             Header: props => exaltedImage,
             accessor: 'itemPriceEx',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ex-column',
             className: 'cards-table__price cards-table__price_ex'
           },
@@ -157,7 +153,7 @@ class CardsTable extends React.Component {
           {
             Header: props => chaosImage,
             accessor: 'profitCh',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ch-column',
             //className: `cards-table__price cards-table__price_ch ${}`
             Cell: props => this.buildProfitCell(props.row.profitCh, false)
@@ -165,7 +161,7 @@ class CardsTable extends React.Component {
           {
             Header: props => exaltedImage,
             accessor: 'profitEx',
-            minWidth: 50,
+            minWidth: 55,
             headerClassName: 'cards-table__ex-column',
             //className: 'cards-table__price cards-table__price_ex'
             Cell: props => this.buildProfitCell(props.row.profitEx, true)
@@ -179,15 +175,10 @@ class CardsTable extends React.Component {
         headerClassName: 'cards-table__margin-heading',
         //className: 'cards-table__margin',
         Cell: props => this.buildMarginCell(props.row.margin),
-        sortMethod: (a, b, desc) => {
-          const aNum = Number(a.substring(0, a.length - 1));
-          const bNum = Number(b.substring(0, b.length - 1));
-          return aNum > bNum ? 1 : -1;
-        }
       },
       {
         Header: '',
-        minWidth: 34,
+        minWidth: 40,
         Cell: props => this.buildSearchCell(props.row.card)
       },
     ];
