@@ -7,7 +7,7 @@ class Nav extends Component {
     return (
       <div className='nav'>
         <div className='nav__logo'>Path of Trade</div>
-        <LeagueSelection />
+        {/* <LeagueSelection /> */}
       </div>
     );
   }

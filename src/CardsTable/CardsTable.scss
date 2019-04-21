@@ -1,7 +1,6 @@
 @import './../Variables.scss';
 
 .cards-table {
-    //background-color: #282828;
     width: 80%;
     min-width: 1070px;
     max-width: 1300px;
@@ -42,18 +41,15 @@
 
 // header groups
 .ReactTable .rt-thead.-headerGroups {
-     background: none;
+     background: $background;
      border-bottom: none;
+     z-index: 1;
 }
 
 .ReactTable .rt-thead.-header {
     box-shadow: none;
-    background: #303030;
-}
-
-// header groups top row headings
-.rt-thead.-headerGroups > .rt-tr > .rt-th{
-    //background: rgb(49, 49, 49);
+    background: $grey-medium;
+    z-index: 1;
 }
 
 // table heading
@@ -62,12 +58,11 @@
     padding: 0 7px;
     line-height: 48px;
     font-weight: 400;
-    font-size: 1.18rem;
+    font-size: 1rem;
     font-weight: 400;
     display: flex;
     justify-content: center;
     align-items: center;
-   //background-color: rgb(53, 53, 53);
 }
 
 //table data
@@ -87,10 +82,6 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
-.cards-table__card-heading {
-    //text-align: left;
-}
-
 .cards-table__card {
     padding-left: 18px !important;
 }
@@ -105,18 +96,9 @@
 }
 
 .cards-table__stack {
-    //padding-left: 18px !important;
     text-align: center;
-    //padding-left: 18px !important;
-    //font-style: italic;
     font-weight: 400;
     font-size: 1.1em;
-    //color: rgb(158, 158, 158);
-}
-
-.cards-table__price_stack {
-    //font-style: italic;
-    //color: rgb(158, 158, 158);
 }
 
 .cards-table__item {
@@ -124,41 +106,19 @@
     padding-left: 18px !important;
 }
 
-.cards-table__price {
-    //text-align: left;
-    //padding: 0 !important;
-}
-
 .cards-table__price_ch {
-    //margin-left: 14px;
     text-align: center;
 }
 
 .ReactTable .rt-tbody .rt-td.cards-table__price_ex,
 .ReactTable .rt-tbody .rt-td .cards-table__price_ex {
-    //margin-right: 14px;
     text-align: center;
-    //border-right: 1px solid rgba(255,255,255,0.05);
     border-right: 1px solid #363535;
-}
-
-
-
-.cards-table__ch-column {
-   // margin-left: 14px;
-}
-
-.cards-table__ex-column {
- //  margin-right: 14px;
 }
 
 .cards-table__margin {
     text-align: right;
 }
-
-// .ReactTable .rt-thead .rt-th.cards-table__margin-heading {
-//     padding-left: 0;
-// }
 
 .cards-table__num_negative {
     color: #ec3737;
@@ -183,11 +143,25 @@
         width: 22px;
         position: absolute;
         top: 2px;
-        //padding-bottom: 10px;
     }
 }
 
 .cards-table__search-btn:hover {
-    background-color: #303030;
+    background-color: $grey-medium;
 }
 
+.-headerGroups_sticky {
+    position: fixed;
+    width: 1070px;
+    top: 0;
+}
+
+.-header_sticky {
+    position: fixed;
+    width: 1070px;
+    top: 48px;
+}
+
+.rt-tbody_sticky-header {
+    margin-top: 96px;
+}

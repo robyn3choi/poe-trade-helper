@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Nav from './Nav/Nav';
 import CardsTable from './CardsTable/CardsTable';
+import ScrollToTop from './ScrollToTop/ScrollToTop';
 
 class App extends Component {
   render() {
@@ -9,6 +10,7 @@ class App extends Component {
       <div className="App">
         <Nav />
         <CardsTable />
+        <ScrollToTop />
       </div>
     );
   }

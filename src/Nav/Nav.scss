@@ -1,8 +1,15 @@
+@import './../Variables.scss';
+
 .nav {
-    height: 60px;
-    background-color: rgb(63, 63, 63);
+    height: 66px;
+    background-color: $black;
+    border-bottom: 1px solid $grey-light;
 }
 
 .nav__logo {
-    
+    font-family: 'Alegreya Sans SC', Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    font-size: 32px;
+    margin-left: 20px;
+    line-height: 66px;
 }
