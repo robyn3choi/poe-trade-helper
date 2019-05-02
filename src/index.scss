@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Alegreya+Sans+SC:300,400');
 @import './Variables.scss';
-// try julius sans one 
+// try julius sans one
 html {
-  font-size: 18px;
+  font-size: 19px;
 }
 
 body {
@@ -10,6 +10,5 @@ body {
   padding: 0;
   background-color: $background;
   color: $white;
-  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+  font-family: 'Alegreya Sans SC', 'Source Sans Pro', Arial, Helvetica, sans-serif;
 }
-
