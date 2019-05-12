@@ -1,57 +1,57 @@
 import React from 'react';
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 import './CardsTable.scss';
 import axios from 'axios';
+import { SSL_OP_NO_TLSv1_1 } from 'constants';
 
 class CardsTable extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = { items: [] };
     this.stickyColumnHeaders.bind(this);
     this.matchColumnHeaderWidthToTable.bind(this);
   }
-  
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.stickyColumnHeaders);
     window.removeEventListener('resize', this.matchColumnHeaderWidthToTable);
   }
 
   componentDidMount() {
-    axios.get('https://api.pathoftrade.com/table')
-    //axios.get('http://localhost:5000/table')
+    axios
+      .get('https://api.pathoftrade.com/table')
+      //axios.get('http://localhost:5000/table')
       .then(res => this.formatItems(res.data.tableEntries, res.data.exaltedPrice))
       .catch(err => console.log(err));
 
     this.headerGroups = document.querySelector('.rt-thead.-headerGroups');
     this.topOfHeaderGroups = this.headerGroups.getBoundingClientRect().top;
     this.header = document.querySelector('.rt-thead.-header');
-    this.tableBody = document.getElementsByClassName('rt-tbody')[0];   
-    
+    this.tableBody = document.getElementsByClassName('rt-tbody')[0];
+
     window.addEventListener('scroll', this.stickyColumnHeaders);
     window.addEventListener('resize', this.matchColumnHeaderWidthToTable);
   }
 
   stickyColumnHeaders = () => {
     if (window.pageYOffset > this.topOfHeaderGroups) {
-      this.headerGroups.classList.add('-headerGroups_sticky')
+      this.headerGroups.classList.add('-headerGroups_sticky');
       this.header.classList.add('-header_sticky');
       this.tableBody.classList.add('rt-tbody_sticky-header');
       this.matchColumnHeaderWidthToTable();
-    }
-    else {
-      this.headerGroups.classList.remove('-headerGroups_sticky')
+    } else {
+      this.headerGroups.classList.remove('-headerGroups_sticky');
       this.header.classList.remove('-header_sticky');
       this.tableBody.classList.remove('rt-tbody_sticky-header');
     }
-  }
+  };
 
   matchColumnHeaderWidthToTable = () => {
-    const tableWidth = this.tableBody.offsetWidth
+    const tableWidth = this.tableBody.offsetWidth;
     this.headerGroups.style.width = tableWidth + 'px';
     this.header.style.width = tableWidth + 'px';
-  }
+  };
 
   formatItems = (items, exaltedPrice) => {
     for (let item of items) {
@@ -60,54 +60,82 @@ class CardsTable extends React.Component {
           item[key] = +val.toFixed(0);
         }
       }
-      item.itemPriceEx = +(item.itemPriceCh / exaltedPrice).toFixed(2);
+
       item.cardPriceEx = +(item.cardPriceCh / exaltedPrice).toFixed(2);
       item.stackPriceCh = item.cardPriceCh * item.stack;
       item.stackPriceEx = +(item.cardPriceEx * item.stack).toFixed(2);
-      item.profitCh = item.itemPriceCh - item.stackPriceCh;
-      item.profitEx = +(item.itemPriceEx - item.stackPriceEx).toFixed(2);
-      item.margin = +(item.profitCh / item.itemPriceCh * 100).toFixed(2);
+
+      if (item.itemPriceCh) {
+        //itemPrice can be null if item doesn't exist in current league yet
+        item.itemPriceEx = +(item.itemPriceCh / exaltedPrice).toFixed(2);
+        item.profitCh = item.itemPriceCh - item.stackPriceCh;
+        item.profitEx = +(item.itemPriceEx - item.stackPriceEx).toFixed(2);
+        item.margin = +((item.profitCh / item.itemPriceCh) * 100).toFixed(2);
+      }
     }
     this.setState({ items });
-  }
+  };
 
-  buildSearchCell = (cardName) => {
+  buildSearchCell = cardName => {
     const formattedCardName = cardName.replace(/ /g, '%20').replace(/'/, '%27');
     const url = `https://www.pathofexile.com/api/trade/search/Synthesis?redirect&source=
       {%22query%22:{%22filters%22:{%22type_filters%22:{%22filters%22:{%22category%22:{%22option%22:%22card%22}}}},%22type%22:
       %22${formattedCardName}%22}}`;
     return (
-      <a className='cards-table__search-btn' href={url} target='_blank' rel='noopener noreferrer'>
-        <img className='cards-table__search-icon' alt='search on pathofexile.com' src='/images/search.svg' />
+      <a className="cards-table__search-btn" href={url} target="_blank" rel="noopener noreferrer">
+        <img className="cards-table__search-icon" alt="search on pathofexile.com" src="/images/search.svg" />
       </a>
     );
-  }
+  };
 
   buildProfitCell = (profit, isEx) => {
     let className = 'cards-table__num_neutral';
+    let profitString = profit;
+    console.log(profit);
+    if (!profit) {
+      profitString = 'N/A';
+    }
     if (profit > 0) {
       className = 'cards-table__num_positive';
-    }
-    else if (profit < 0) {
+    } else if (profit < 0) {
       className = 'cards-table__num_negative';
     }
-    return <div className={`cards-table__price cards-table__price_${isEx ? 'ex' : 'ch'} ${className}`}>{profit}</div>;
-  }
+    return (
+      <div className={`cards-table__price cards-table__price_${isEx ? 'ex' : 'ch'} ${className}`}>
+        {profitString}
+      </div>
+    );
+  };
 
-  buildMarginCell = (margin) => {
+  buildMarginCell = margin => {
     let className = 'cards-table__num_neutral';
+    let marginString = margin + '%';
+    if (!margin) {
+      marginString = 'N/A';
+    }
     if (margin > 0) {
       className = 'cards-table__num_positive';
-    }
-    else if (margin < 0) {
+    } else if (margin < 0) {
       className = 'cards-table__num_negative';
     }
-    return <div className={`cards-table__price cards-table__margin ${className}`}>{margin + '%'}</div>;
-  }
+    return <div className={`cards-table__price cards-table__margin ${className}`}>{marginString}</div>;
+  };
 
   render() {
-    const chaosImage = <img className='cards-table__currency-icon' src={process.env.PUBLIC_URL + 'images/chaos.png'} alt='chaos' />;
-    const exaltedImage = <img className='cards-table__currency-icon' src={process.env.PUBLIC_URL + 'images/exalted.png'} alt='exalted' />;
+    const chaosImage = (
+      <img
+        className="cards-table__currency-icon"
+        src={process.env.PUBLIC_URL + 'images/chaos.png'}
+        alt="chaos"
+      />
+    );
+    const exaltedImage = (
+      <img
+        className="cards-table__currency-icon"
+        src={process.env.PUBLIC_URL + 'images/exalted.png'}
+        alt="exalted"
+      />
+    );
     const columns = [
       {
         Header: 'Card',
@@ -121,18 +149,24 @@ class CardsTable extends React.Component {
         columns: [
           {
             Header: props => chaosImage,
-            accessor: 'cardPriceCh',
+            id: 'cardPriceCh',
+            accessor: row => {
+              return row.cardPriceCh ? row.cardPriceCh : 'N/A';
+            },
             minWidth: 55,
             headerClassName: 'cards-table__ch-column',
             className: 'cards-table__price cards-table__price_ch'
           },
           {
             Header: props => exaltedImage,
-            accessor: 'cardPriceEx',
+            id: 'cardPriceEx',
+            accessor: row => {
+              return row.cardPriceEx ? row.cardPriceEx : 'N/A';
+            },
             minWidth: 55,
             headerClassName: 'cards-table__ex-column',
             className: 'cards-table__price cards-table__price_ex'
-          },
+          }
         ]
       },
       {
@@ -146,18 +180,24 @@ class CardsTable extends React.Component {
         columns: [
           {
             Header: props => chaosImage,
-            accessor: 'stackPriceCh',
+            id: 'stackPriceCh',
+            accessor: row => {
+              return row.stackPriceCh ? row.stackPriceCh : 'N/A';
+            },
             minWidth: 55,
             headerClassName: 'cards-table__ch-column',
             className: 'cards-table__price cards-table__price_ch cards-table__price_stack'
           },
           {
             Header: props => exaltedImage,
-            accessor: 'stackPriceEx',
+            id: 'stackPriceEx',
+            accessor: row => {
+              return row.stackPriceEx ? row.stackPriceEx : 'N/A';
+            },
             minWidth: 55,
             headerClassName: 'cards-table__ex-column',
             className: 'cards-table__price cards-table__price_ex cards-table__price_stack'
-          },
+          }
         ]
       },
       {
@@ -171,18 +211,24 @@ class CardsTable extends React.Component {
         columns: [
           {
             Header: props => chaosImage,
-            accessor: 'itemPriceCh',
+            id: 'itemPriceCh',
+            accessor: row => {
+              return row.itemPriceCh ? row.itemPriceCh : 'N/A';
+            },
             minWidth: 55,
             headerClassName: 'cards-table__ch-column',
             className: 'cards-table__price cards-table__price_ch'
           },
           {
             Header: props => exaltedImage,
-            accessor: 'itemPriceEx',
+            id: 'itemPriceEx',
+            accessor: row => {
+              return row.itemPriceEx ? row.itemPriceEx : 'N/A';
+            },
             minWidth: 55,
             headerClassName: 'cards-table__ex-column',
             className: 'cards-table__price cards-table__price_ex'
-          },
+          }
         ]
       },
       {
@@ -193,7 +239,6 @@ class CardsTable extends React.Component {
             accessor: 'profitCh',
             minWidth: 55,
             headerClassName: 'cards-table__ch-column',
-            //className: `cards-table__price cards-table__price_ch ${}`
             Cell: props => this.buildProfitCell(props.row.profitCh, false)
           },
           {
@@ -201,9 +246,8 @@ class CardsTable extends React.Component {
             accessor: 'profitEx',
             minWidth: 55,
             headerClassName: 'cards-table__ex-column',
-            //className: 'cards-table__price cards-table__price_ex'
             Cell: props => this.buildProfitCell(props.row.profitEx, true)
-          },
+          }
         ]
       },
       {
@@ -211,26 +255,39 @@ class CardsTable extends React.Component {
         accessor: 'margin',
         minWidth: 70,
         headerClassName: 'cards-table__margin-heading',
-        //className: 'cards-table__margin',
-        Cell: props => this.buildMarginCell(props.row.margin),
+        Cell: props => this.buildMarginCell(props.row.margin)
       },
       {
         Header: '',
         minWidth: 40,
         Cell: props => this.buildSearchCell(props.row.card)
-      },
+      }
     ];
 
     return (
-      <div className="App" >
-        <ReactTable data={this.state.items}
+      <div className="App">
+        <ReactTable
+          data={this.state.items}
           columns={columns}
           defaultSorted={[{ id: 'cardPriceCh', desc: true }]}
           resizable={false}
           minRows={0}
           showPagination={false}
           pageSize={this.state.items.length}
-          className='-striped -highlight cards-table' />
+          className="-striped -highlight cards-table"
+          noDataText='Loading...'
+          defaultSortMethod={(a, b, desc) => {
+            a = a === null || a === undefined || a === 'N/A' ? -Infinity : a;
+            b = b === null || b === undefined || b === 'N/A' ? -Infinity : b;
+            if (a > b) {
+              return 1;
+            }
+            if (a < b) {
+              return -1;
+            }
+            return 0;
+          }}
+        />
       </div>
     );
   }
