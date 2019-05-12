@@ -6,12 +6,8 @@ import axios from 'axios';
 import { SSL_OP_NO_TLSv1_1 } from 'constants';
 
 class CardsTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { items: [] };
-    this.stickyColumnHeaders.bind(this);
-    this.matchColumnHeaderWidthToTable.bind(this);
-  }
+  
+  state = { items: [] };
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.stickyColumnHeaders);
@@ -24,34 +20,7 @@ class CardsTable extends React.Component {
       //axios.get('http://localhost:5000/table')
       .then(res => this.formatItems(res.data.tableEntries, res.data.exaltedPrice))
       .catch(err => console.log(err));
-
-    this.headerGroups = document.querySelector('.rt-thead.-headerGroups');
-    this.topOfHeaderGroups = this.headerGroups.getBoundingClientRect().top;
-    this.header = document.querySelector('.rt-thead.-header');
-    this.tableBody = document.getElementsByClassName('rt-tbody')[0];
-
-    window.addEventListener('scroll', this.stickyColumnHeaders);
-    window.addEventListener('resize', this.matchColumnHeaderWidthToTable);
   }
-
-  stickyColumnHeaders = () => {
-    if (window.pageYOffset > this.topOfHeaderGroups) {
-      this.headerGroups.classList.add('-headerGroups_sticky');
-      this.header.classList.add('-header_sticky');
-      this.tableBody.classList.add('rt-tbody_sticky-header');
-      this.matchColumnHeaderWidthToTable();
-    } else {
-      this.headerGroups.classList.remove('-headerGroups_sticky');
-      this.header.classList.remove('-header_sticky');
-      this.tableBody.classList.remove('rt-tbody_sticky-header');
-    }
-  };
-
-  matchColumnHeaderWidthToTable = () => {
-    const tableWidth = this.tableBody.offsetWidth;
-    this.headerGroups.style.width = tableWidth + 'px';
-    this.header.style.width = tableWidth + 'px';
-  };
 
   formatItems = (items, exaltedPrice) => {
     for (let item of items) {
