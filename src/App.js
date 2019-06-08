@@ -7,7 +7,7 @@ import ScrollToTop from './ScrollToTop/ScrollToTop';
 class App extends Component {
   render() {
     return (
-      <div className='App'>
+      <div className="App">
         <Nav />
         <CardsTable />
         <ScrollToTop />

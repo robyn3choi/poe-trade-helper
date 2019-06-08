@@ -3,10 +3,9 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import './CardsTable.scss';
 import axios from 'axios';
-import { SSL_OP_NO_TLSv1_1 } from 'constants';
+import { connect } from 'react-redux';
 
 class CardsTable extends React.Component {
-  
   state = { items: [] };
 
   componentWillUnmount() {
@@ -14,12 +13,15 @@ class CardsTable extends React.Component {
     window.removeEventListener('resize', this.matchColumnHeaderWidthToTable);
   }
 
-  componentDidMount() {
-    axios
-      .get('https://api.pathoftrade.com/table')
-      //axios.get('http://localhost:5000/table')
-      .then(res => this.formatItems(res.data.tableEntries, res.data.exaltedPrice))
-      .catch(err => console.log(err));
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedLeague !== prevProps.selectedLeague) {
+      this.setState({ items: [] });
+      axios
+        .get('https://api.pathoftrade.com/table?league=' + this.props.selectedLeague)
+        //.get('http://localhost:5000/table?league=' + this.props.selectedLeague)
+        .then(res => this.formatItems(res.data.tableEntries, res.data.exaltedPrice))
+        .catch(err => console.log(err));
+    }
   }
 
   formatItems = (items, exaltedPrice) => {
@@ -60,8 +62,7 @@ class CardsTable extends React.Component {
   buildProfitCell = (profit, isEx) => {
     let className = 'cards-table__num_neutral';
     let profitString = profit;
-    console.log(profit);
-    if (!profit) {
+    if (profit === undefined) {
       profitString = 'N/A';
     }
     if (profit > 0) {
@@ -69,17 +70,13 @@ class CardsTable extends React.Component {
     } else if (profit < 0) {
       className = 'cards-table__num_negative';
     }
-    return (
-      <div className={`cards-table__price cards-table__price_${isEx ? 'ex' : 'ch'} ${className}`}>
-        {profitString}
-      </div>
-    );
+    return <div className={`cards-table__price cards-table__price_${isEx ? 'ex' : 'ch'} ${className}`}>{profitString}</div>;
   };
 
   buildMarginCell = margin => {
     let className = 'cards-table__num_neutral';
     let marginString = margin + '%';
-    if (!margin) {
+    if (margin === undefined) {
       marginString = 'N/A';
     }
     if (margin > 0) {
@@ -91,20 +88,8 @@ class CardsTable extends React.Component {
   };
 
   render() {
-    const chaosImage = (
-      <img
-        className="cards-table__currency-icon"
-        src={process.env.PUBLIC_URL + 'images/chaos.png'}
-        alt="chaos"
-      />
-    );
-    const exaltedImage = (
-      <img
-        className="cards-table__currency-icon"
-        src={process.env.PUBLIC_URL + 'images/exalted.png'}
-        alt="exalted"
-      />
-    );
+    const chaosImage = <img className="cards-table__currency-icon" src={process.env.PUBLIC_URL + 'images/chaos.png'} alt="chaos" />;
+    const exaltedImage = <img className="cards-table__currency-icon" src={process.env.PUBLIC_URL + 'images/exalted.png'} alt="exalted" />;
     const columns = [
       {
         Header: 'Card',
@@ -244,7 +229,7 @@ class CardsTable extends React.Component {
           showPagination={false}
           pageSize={this.state.items.length}
           className="-striped -highlight cards-table"
-          noDataText='Loading...'
+          noDataText="Loading..."
           defaultSortMethod={(a, b, desc) => {
             a = a === null || a === undefined || a === 'N/A' ? -Infinity : a;
             b = b === null || b === undefined || b === 'N/A' ? -Infinity : b;
@@ -262,4 +247,10 @@ class CardsTable extends React.Component {
   }
 }
 
-export default CardsTable;
+const mapStateToProps = state => {
+  return {
+    selectedLeague: state.selectedLeague
+  };
+};
+
+export default connect(mapStateToProps)(CardsTable);

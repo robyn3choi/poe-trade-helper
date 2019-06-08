@@ -1,15 +1,35 @@
 @import './../Variables.scss';
 
 .nav {
-    height: 66px;
-    background-color: $black;
-    border-bottom: 1px solid $grey-light;
+  height: 66px;
+  background-color: $black;
+  border-bottom: 1px solid $gold;
+  position: relative;
 }
 
 .nav__logo {
-    font-family: 'Alegreya Sans SC', Arial, Helvetica, sans-serif;
-    font-weight: 300;
-    font-size: 32px;
-    margin-left: 20px;
-    line-height: 66px;
+  font-family: $font;
+  font-weight: 300;
+  font-size: 32px;
+  margin-left: 20px;
+  line-height: 66px;
+}
+
+.league-selection {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background: $gold;
+  color: $white;
+  border: none;
+  //border-left: 1px solid $grey-light;
+  padding-left: 14px;
+  padding-right: 2px;
+  text-align: center;
+
+  option {
+    background: $black;
+    font-family: $font;
+  }
 }
