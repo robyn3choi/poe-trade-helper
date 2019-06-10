@@ -49,7 +49,7 @@ class CardsTable extends React.Component {
 
   buildSearchCell = cardName => {
     const formattedCardName = cardName.replace(/ /g, '%20').replace(/'/, '%27');
-    const url = `https://www.pathofexile.com/api/trade/search/Synthesis?redirect&source=
+    const url = `https://www.pathofexile.com/api/trade/search/${this.props.selectedLeague}?redirect&source=
       {%22query%22:{%22filters%22:{%22type_filters%22:{%22filters%22:{%22category%22:{%22option%22:%22card%22}}}},%22type%22:
       %22${formattedCardName}%22}}`;
     return (
